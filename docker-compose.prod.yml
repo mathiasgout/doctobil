@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  app:
+    container_name: doctobil
+    build: ./app
+    volumes:
+      - ./config.json:/app/config.json
+      - ./data:/app/data/:rw
+      - /var/log/doctobil:/app/log/:rw
+    network_mode: "host"

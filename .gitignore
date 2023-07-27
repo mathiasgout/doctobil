@@ -1,0 +1,9 @@
+.DS_Store
+.vscode
+__pycache__
+venv
+things.py
+log
+data
+config.json
+geckodriver
