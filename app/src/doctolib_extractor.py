@@ -25,12 +25,6 @@ class DoctolibExtrator:
 
         self._create_data_folder(path_folder_data)
 
-        self.base_headers = {
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/115.0",
-            "Host": "www.doctolib.fr",
-            "DNT": "1",
-        }
-
     def extract_data_to_json(self) -> None:
         try:
             datas = []
@@ -47,25 +41,29 @@ class DoctolibExtrator:
             logger.error(f"{e.__class__.__name__}: {e}")
 
     def _get_page_text(self, page: int) -> Optional[str]:
-        headers = self.base_headers.copy()
-        headers[
-            "Accept"
-        ] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"
-        headers["Accept-Language"] = "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3"
-        headers["Accept-Encoding"] = "gzip, deflate, br"
-        headers["Connection"] = "keep-alive"
-        headers["Upgrade-Insecure-Requests"] = "1"
-        headers["Sec-Fetch-Dest"] = "document"
-        headers["Sec-Fetch-Mode"] = "navigate"
-        headers["Sec-Fetch-Site"] = "none"
-        headers["Sec-Fetch-User"] = "?1"
-        headers["Pragma"] = "no-cache"
-        headers["Cache-Control"] = "no-cache"
+        headers = {
+            "Host": "www.doctolib.fr",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/115.0",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+            # "Accept-Language": "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3",
+            # "Accept-Encoding": "gzip, deflate, br",
+            # "DNT": "1",
+            # "Connection": "keep-alive",
+            # "Upgrade-Insecure-Requests": "1",
+            # "Sec-Fetch-Dest": "document",
+            # "Sec-Fetch-Mode": "navigate",
+            # "Sec-Fetch-Site": "none",
+            # "Sec-Fetch-User": "?1",
+            # "Pragma": "no-cache",
+            # "Cache-Control": "no-cache",
+        }
 
-        r_get = requests.get(
-            f"https://www.doctolib.fr/{self.speciality}/{self.place}?page={page}",
-            headers=headers,
-        )
+        if page == 1:
+            url = f"https://www.doctolib.fr/{self.speciality}/{self.place}"
+        else:
+            url = f"https://www.doctolib.fr/{self.speciality}/{self.place}?page={page}"
+
+        r_get = requests.get(url, headers=headers)
         logger.debug(f"{r_get.url} (code={r_get.status_code})")
 
         if r_get.ok:
@@ -103,12 +101,16 @@ class DoctolibExtrator:
             return {"data": datas, "end": True}
         return {"data": datas, "end": False}
 
-    def _extract_availabilities(
-        self, doctor_id: str, speciality_id: str
-    ) -> Optional[int]:
+    @staticmethod
+    def _extract_availabilities(doctor_id: str, speciality_id: str) -> Optional[int]:
+        headers = {
+            "Host": "www.doctolib.fr",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/115.0",
+        }
+
         r_get = requests.get(
             f"https://www.doctolib.fr/search_results/{doctor_id}.json?limit=7&speciality_id={speciality_id}",
-            headers=self.base_headers,
+            headers=headers,
         )
         logger.debug(f"{r_get.url} (code={r_get.status_code})")
 
