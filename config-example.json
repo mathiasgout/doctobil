@@ -1,4 +1,5 @@
 {
-    "speciality": "Ostéopathe",
-    "place": "Paris 14"
+    "speciality": "osteopathe",
+    "place": "paris-14",
+    "time_to_wait": 1800
 }
