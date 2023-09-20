@@ -1,8 +1,7 @@
-.DS_Store
 .vscode
-__pycache__
 venv
+__pycache__
+.pytest_cache
+
 things.py
-log
-data
-config.json
+.coverage

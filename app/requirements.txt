@@ -1,8 +1,0 @@
-beautifulsoup4==4.12.2
-certifi==2023.7.22
-charset-normalizer==3.2.0
-idna==3.4
-random-tools @ git+https://github.com/mathiasgout/random-tools.git@77d12ac706f97bfe2d22c96b65f097139b84255e
-requests==2.31.0
-soupsieve==2.4.1
-urllib3==2.0.4
