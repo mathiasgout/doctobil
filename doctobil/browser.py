@@ -26,6 +26,7 @@ class DoctolibBrowser:
     def _init_driver(self) -> webdriver.Chrome:
         options = webdriver.ChromeOptions()
         options.add_argument("--headless=new")
+        options.add_argument('--no-sandbox')
 
         # To get acces to browser logs (https://stackoverflow.com/questions/52633697/selenium-python-how-to-capture-network-traffics-response)
         options.set_capability("goog:loggingPrefs", {"performance": "ALL"})
