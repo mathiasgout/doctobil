@@ -58,7 +58,9 @@ class DoctolibBrowser:
             "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
         )
         if self.remote_address:
-            logger.info(f"WebDriver created with remote address ({self.remote_address})")
+            logger.info(
+                f"WebDriver created with remote address ({self.remote_address})"
+            )
         else:
             logger.info(f"WebDriver created ({driver.service.path})")
 
@@ -184,12 +186,23 @@ class DoctolibBrowser:
             for event in response_events:
                 url = event["params"]["response"]["url"]
                 if f"https://www.doctolib.fr/search_results" in url:
-                    r = self.driver.execute_cdp_cmd(
-                        "Network.getResponseBody",
-                        {"requestId": event["params"]["requestId"]},
+                    resource = (
+                        "/session/%s/chromium/send_command_and_get_result"
+                        % self.driver.session_id
                     )
+                    url_session = self.driver.command_executor._url + resource
+                    body = json.dumps(
+                        {
+                            "cmd": "Network.getResponseBody",
+                            "params": {"requestId": event["params"]["requestId"]},
+                        }
+                    )
+                    response = self.driver.command_executor._request(
+                        "POST", url_session, body
+                    )
+
                     availabilities[self._extract_doctor_id_from_url(url)] = json.loads(
-                        r["body"]
+                        response.get("value")["body"]
                     )
 
             self.driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
