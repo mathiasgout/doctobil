@@ -1,6 +1,7 @@
 import json
 import time
 import logging
+from typing import Optional
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -16,19 +17,20 @@ logger = logging.getLogger(__name__)
 
 
 class DoctolibBrowser:
-    def __init__(self, speciality: str, place: str) -> None:
+    def __init__(
+        self, speciality: str, place: str, remote_address: Optional[str] = None
+    ) -> None:
         self.speciality = speciality
         self.place = place
+        self.remote_address = remote_address
         self.driver = self._init_driver()
 
         self.first_page_fetched = False
 
     def _init_driver(self) -> webdriver.Chrome:
         options = webdriver.ChromeOptions()
-        options.add_argument("--headless")
-        options.add_argument('--no-sandbox')
-        options.add_argument("--disable-setuid-sandbox")
-        options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--headless=new")
+        options.add_argument("--no-sandbox")
 
         # To get acces to browser logs (https://stackoverflow.com/questions/52633697/selenium-python-how-to-capture-network-traffics-response)
         options.set_capability("goog:loggingPrefs", {"performance": "ALL"})
@@ -42,7 +44,13 @@ class DoctolibBrowser:
         # Turn-off userAutomationExtension
         options.add_experimental_option("useAutomationExtension", False)
 
-        driver = webdriver.Chrome(options=options)
+        if self.remote_address:
+            driver = webdriver.Remote(
+                command_executor=self.remote_address, options=options
+            )
+        else:
+            driver = webdriver.Chrome(options=options)
+
         driver.maximize_window()
 
         # Changing the property of the navigator value for webdriver to undefined

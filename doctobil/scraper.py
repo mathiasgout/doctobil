@@ -1,12 +1,18 @@
+from typing import Optional
+
 from doctobil.browser import DoctolibBrowser
 from doctobil.extractor import DoctolibExtractor
 
 
 class Doctobil:
-    def __init__(self, speciality: str, place: str) -> None:
+    def __init__(
+        self, speciality: str, place: str, remote_address: Optional[str] = None
+    ) -> None:
         self.speciality = speciality
         self.place = place
-        self.doctolib_browser = DoctolibBrowser(speciality=speciality, place=place)
+        self.doctolib_browser = DoctolibBrowser(
+            speciality=speciality, place=place, remote_address=remote_address
+        )
         self.doctolib_extractor = DoctolibExtractor()
 
     def extract_data(self) -> dict:
