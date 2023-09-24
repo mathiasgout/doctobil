@@ -57,7 +57,11 @@ class DoctolibBrowser:
         driver.execute_script(
             "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
         )
-        logger.info(f"WebDriver created ({driver.service.path})")
+        if self.remote_address:
+            logger.info(f"WebDriver created with remote address ({self.remote_address})")
+        else:
+            logger.info(f"WebDriver created ({driver.service.path})")
+
         return driver
 
     def _get_first_page(self) -> str:
