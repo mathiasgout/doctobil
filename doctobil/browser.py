@@ -71,7 +71,7 @@ class DoctolibBrowser:
 
         # Refuse cookie
         try:
-            refuse_cookie_button = WebDriverWait(driver=self.driver, timeout=20).until(
+            refuse_cookie_button = WebDriverWait(driver=self.driver, timeout=60).until(
                 EC.presence_of_element_located((By.ID, "didomi-notice-disagree-button"))
             )
             refuse_cookie_button.click()
@@ -81,17 +81,17 @@ class DoctolibBrowser:
             pass
 
         # Search for speciality
-        searchbar_query = WebDriverWait(driver=self.driver, timeout=20).until(
+        searchbar_query = WebDriverWait(driver=self.driver, timeout=60).until(
             EC.presence_of_element_located((By.ID, ":r0:"))
         )
         searchbar_query.send_keys(self.speciality)
-        search_query_container = WebDriverWait(driver=self.driver, timeout=20).until(
+        search_query_container = WebDriverWait(driver=self.driver, timeout=60).until(
             EC.presence_of_element_located(
                 (By.ID, "search-query-input-results-container")
             )
         )
         searchbar_query_buttons = WebDriverWait(
-            driver=search_query_container, timeout=20
+            driver=search_query_container, timeout=60
         ).until(
             EC.presence_of_all_elements_located((By.CLASS_NAME, "searchbar-result"))
         )
@@ -102,17 +102,17 @@ class DoctolibBrowser:
         searchbar_query_buttons[0].click()
 
         # Search for place
-        searchbar_place = WebDriverWait(driver=self.driver, timeout=20).until(
+        searchbar_place = WebDriverWait(driver=self.driver, timeout=60).until(
             EC.presence_of_element_located((By.ID, ":r1:"))
         )
         searchbar_place.send_keys(self.place)
-        search_place_container = WebDriverWait(driver=self.driver, timeout=20).until(
+        search_place_container = WebDriverWait(driver=self.driver, timeout=60).until(
             EC.presence_of_element_located(
                 (By.ID, "search-place-input-results-container")
             )
         )
         searchbar_place_buttons = WebDriverWait(
-            driver=search_place_container, timeout=20
+            driver=search_place_container, timeout=60
         ).until(
             EC.presence_of_all_elements_located(((By.CLASS_NAME, "searchbar-result")))
         )
@@ -123,7 +123,7 @@ class DoctolibBrowser:
         searchbar_place_buttons[1].click()
 
         # Click on button "Rechercher"
-        search_button = WebDriverWait(driver=self.driver, timeout=20).until(
+        search_button = WebDriverWait(driver=self.driver, timeout=60).until(
             EC.presence_of_element_located(
                 (By.CLASS_NAME, "searchbar-submit-button-label")
             )
@@ -132,7 +132,7 @@ class DoctolibBrowser:
         search_button.click()
 
         # Wait until page can be parsed
-        WebDriverWait(driver=self.driver, timeout=20).until(
+        WebDriverWait(driver=self.driver, timeout=60).until(
             EC.presence_of_element_located((By.CLASS_NAME, "search-results-col-list"))
         )
 
@@ -145,7 +145,7 @@ class DoctolibBrowser:
         # Click on next page button
         for _ in range(5):
             try:
-                next_button = WebDriverWait(driver=self.driver, timeout=20).until(
+                next_button = WebDriverWait(driver=self.driver, timeout=60).until(
                     EC.presence_of_element_located((By.CLASS_NAME, "next-link"))
                 )
                 logger.info(
@@ -171,7 +171,7 @@ class DoctolibBrowser:
             raise ElementClickInterceptedException("unclickable button")
 
         # Wait until page can be parsed
-        WebDriverWait(driver=self.driver, timeout=20).until(
+        WebDriverWait(driver=self.driver, timeout=60).until(
             EC.presence_of_element_located((By.CLASS_NAME, "search-results-col-list"))
         )
 
