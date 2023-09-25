@@ -51,7 +51,7 @@ class DoctolibBrowser:
         else:
             driver = webdriver.Chrome(options=options)
 
-        driver.maximize_window()
+        driver.set_window_size(1400, 1000)
 
         # Changing the property of the navigator value for webdriver to undefined
         driver.execute_script(
@@ -140,8 +140,10 @@ class DoctolibBrowser:
         return self.driver.page_source
 
     def _get_next_page(self) -> str:
+        clicked = False
+
         # Click on next page button
-        while True:
+        for _ in range(5):
             try:
                 next_button = WebDriverWait(driver=self.driver, timeout=10).until(
                     EC.presence_of_element_located((By.CLASS_NAME, "next-link"))
@@ -149,18 +151,24 @@ class DoctolibBrowser:
                 logger.info(
                     f"[{self.driver.current_url}] Next page button about to be clicked"
                 )
+                self.driver.execute_script(
+                    f"window.scrollTo(0,{next_button.location['y'] - next_button.size['height']*10})"
+                )
+                time.sleep(1)
                 next_button.click()
+                clicked = True
+
             except ElementClickInterceptedException:
                 logger.warning(
                     f"[{self.driver.current_url}] Next page button unclickable"
                 )
-                self.driver.execute_script(
-                    "window.scrollTo(0,document.body.scrollHeight)"
-                )
+                self.driver.execute_script(f"window.scrollTo(0,3000)")
                 time.sleep(2)
-                self.driver.get_screenshot_as_file("data/screenshot.png")
                 continue
             break
+
+        if not clicked:
+            raise ElementClickInterceptedException("unclickable button")
 
         # Wait until page can be parsed
         WebDriverWait(driver=self.driver, timeout=10).until(
@@ -211,7 +219,7 @@ class DoctolibBrowser:
                     )
 
             self.driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
-            time.sleep(2)
+            time.sleep(1)
 
         logger.info(
             f"[{self.driver.current_url}] {len(availabilities)} availabilities of doctors extracted"

@@ -37,6 +37,7 @@ class Doctobil:
                 datas.append(data)
 
             if page_data["end"]:
-                return datas
+                break
 
+        self.doctolib_browser.driver.quit()
         return datas
