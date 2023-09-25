@@ -141,7 +141,7 @@ class DoctolibBrowser:
 
     def _get_next_page(self) -> str:
         # Click on next page button
-        for _ in range(10):
+        while True:
             try:
                 next_button = WebDriverWait(driver=self.driver, timeout=10).until(
                     EC.presence_of_element_located((By.CLASS_NAME, "next-link"))
@@ -158,6 +158,7 @@ class DoctolibBrowser:
                     "window.scrollTo(0,document.body.scrollHeight)"
                 )
                 time.sleep(2)
+                self.driver.get_screenshot_as_file("data/screenshot.png")
                 continue
             break
 
