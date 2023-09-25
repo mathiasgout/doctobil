@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="doctobil",
-    version="0.0.10",
+    version="0.0.11",
     author="Mathias Gout",
     packages=find_packages(exclude=["tests"]),
     install_requires=["selenium==4.12.0", "beautifulsoup4==4.12.2"],
