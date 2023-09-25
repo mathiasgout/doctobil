@@ -141,7 +141,7 @@ class DoctolibBrowser:
 
     def _get_next_page(self) -> str:
         # Click on next page button
-        while True:
+        for _ in range(10):
             try:
                 next_button = WebDriverWait(driver=self.driver, timeout=10).until(
                     EC.presence_of_element_located((By.CLASS_NAME, "next-link"))
@@ -154,6 +154,10 @@ class DoctolibBrowser:
                 logger.warning(
                     f"[{self.driver.current_url}] Next page button unclickable"
                 )
+                self.driver.execute_script(
+                    "window.scrollTo(0,document.body.scrollHeight)"
+                )
+                time.sleep(2)
                 continue
             break
 
