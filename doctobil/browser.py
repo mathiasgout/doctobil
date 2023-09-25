@@ -184,7 +184,7 @@ class DoctolibBrowser:
 
     def get_doctors_availabilities(self) -> dict:
         availabilities = {}
-        for _ in range(5):
+        for i in range(1, 6):
             browser_log = self.driver.get_log("performance")
             events = [self._process_browser_log_entry(entry) for entry in browser_log]
             response_events = [
@@ -218,8 +218,8 @@ class DoctolibBrowser:
                         response.get("value")["body"]
                     )
 
-            self.driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
-            time.sleep(3)
+            self.driver.execute_script(f"window.scrollTo(0, {i*3000})")
+            time.sleep(2)
 
         logger.info(
             f"[{self.driver.current_url}] {len(availabilities)} availabilities of doctors extracted"
